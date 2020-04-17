@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAXSIZE 100
+#define bool int
+#define false 0
+#define true 1 
 
 
 typedef int ElemType;

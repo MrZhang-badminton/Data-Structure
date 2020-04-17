@@ -5,6 +5,9 @@
 
 #define MAXTABLESIZE 100000
 #define KEYLENGTH 15
+#define bool int
+#define false 0
+#define true 1 
 
 typedef char ElementType[KEYLENGTH+1];//关键词用字符串类型
 typedef int Index;

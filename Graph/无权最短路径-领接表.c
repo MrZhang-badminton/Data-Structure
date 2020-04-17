@@ -1,69 +1,74 @@
 #include<stdio.h>
 #include<stdlib.h>
-
+#define MAXSIZE 100 
 #define MaxVertexNum 100
+#define bool int
+#define false 0
+#define true 1 
+
 typedef int Vertex;
 typedef int WeightType;
 typedef char DataType;
-typedef int ElemType;
-int Visited[MaxVertexNum] ={false};
+
+//队列数据 
+typedef Vertex ElemType;
+
+
+/*
+	输入如下：
+	顶点数                       2
+	边数                         1
+	边信息(起点，终点，权重)     0 1 100  //0 1 为位置不是a,b 
+	顶点存放的信息               a
+                                 b
+*/ 
+
 
 /*-------------------队列---------------------*/
-typedef struct QNode{
-	ElemType data;
-	struct QNode *next;
-}QNode,*Queueptr;
+typedef struct QNode *PtrToQNode;
+struct QNode{
+	ElemType *elem;
+	int front;
+	int rear;
+}; 
+typedef PtrToQNode Que;
 
-typedef struct{
-	Queueptr front;
-	Queueptr rear;
-}LinkQue;
-
-LinkQue * InitQueue(){
-	LinkQue *q = (LinkQue *)malloc(sizeof(LinkQue));
-	q->front = q->rear = NULL;
-	return q;
+Que CreateQueue(){
+	Que Q;
+	Q = (Que)malloc(sizeof(struct QNode));
+	Q->elem = (ElemType*)malloc(sizeof(ElemType)*MAXSIZE);
+	Q->front = Q->rear;
+	return Q;
 }
 
-void Enqueue(LinkQue *q, ElemType ele){
-	Queueptr p = (Queueptr)malloc(sizeof(QNode));
-	if(p == NULL)return;
-	p->data = ele;
-	p->next = NULL;
-	if(q->front == NULL){
-		q->front = p;
-		q->rear = p;
-	}else{
-		q->rear->next = p;
-		q->rear = p; 
+bool IsFull(Que Q){
+	return (Q->rear+1)%MAXSIZE == Q->front;
+}
+
+void Add(Que Q,ElemType Elem){
+	if(IsFull(Q)){
+		printf("队列已满！\n");
+		exit(0); 
 	}
+	Q->elem[Q->rear] = Elem;
+	Q->rear = (Q->rear+1)%MAXSIZE;
 }
 
-int isEmpty(LinkQue *q){
-	return q->front == NULL;
+bool IsEmpty(Que Q){
+	return Q->front == Q->rear;
 }
 
-
-ElemType Dequeue(LinkQue *q){
-	if(isEmpty(q)){
-		printf("Error!\n");
+ElemType Delete(Que Q){
+	ElemType temp;
+	if(IsEmpty(Q)){
+		printf("队列已空！\n");
 		exit(0);
 	}
-	
-	Queueptr p = q->front;
-	ElemType temp = q->front->data;
-	
-	
-	if(q->front == q->rear){
-		q->front = NULL;
-		q->rear = NULL;
-	}else{
-		q->front = q->front->next;
-	}
-	free(p);
+	temp = Q->elem[Q->front];
+	Q->front = (Q->front+1)%MAXSIZE;
 	return temp;
-	
 }
+
 /*-----------------------------------------------*/ 
 
 /*-------------------邻接表的创建-----------------------*/
@@ -149,7 +154,6 @@ LGraph BuildGraph(){
 			InsertEdge(Graph,E);
 		}
 	} 
-
 	//如果顶点有数据
 	for(V = 0; V < Graph->Nv; V++)
 		scanf(" %c",&Graph->G[V].Data);
@@ -159,31 +163,48 @@ LGraph BuildGraph(){
 
 /*--------------------------------------------*/
 
-/*---------------------DFS--------------------*/
-void Visit(Vertex V){
-	printf("正在访问顶点%d\n");
-}
-
-void DFS(LGraph Graph, Vertex V,void (*visit)(Vertex)){
+/*-----------------无权最短路-----------------*/
+void Uweighted(LGraph Graph,int dist[], int path[], Vertex S){
+	Que Q;
+	Vertex V;
 	PtrToAdjVNode W;
 	
-	Visit(V);
-	Visited[V] = true;
-	
-	for(W = Graph->G[V].FirstEdge;W;W = W->Next){
-		if(!Visited[W->Adjv])
-			DFS(Graph, W->Adjv, Visit);
+	Q = CreateQueue();
+	dist[S] = 0;
+	Add(Q,S);
+	while(!IsEmpty(Q)){
+		printf("111\n");
+		V = Delete(Q);
+		for(W = Graph->G[V].FirstEdge; W; W = W->Next){
+			if(dist[W->Adjv] == -1){
+				dist[W->Adjv] = dist[V] + 1;
+				path[W->Adjv] = V;
+				Add(Q,W->Adjv);
+ 			}
+		}
 	}
+	
 }
+
 /*--------------------------------------------*/
 
 int main(){
 	int i,j;
 	PtrToAdjVNode cur;
 	LGraph Graph = NULL;
+	int *dist,*path;
+	
 	Graph = BuildGraph();
 	
+	dist = (int *)malloc(sizeof(int)*Graph->Nv);
+	path = (int *)malloc(sizeof(int)*Graph->Nv);
+
+	for(i = 0; i < Graph->Nv; i++){
+		dist[i] = -1;
+		path[i] = -1;
+	}
 	
+/*--------------输出图的基本信息-------------*/	
 	for(i = 0; i < Graph->Nv; i++){
 		printf("%3c",Graph->G[i].Data);
 		cur = Graph->G[i].FirstEdge;
@@ -200,6 +221,22 @@ int main(){
 	
 	printf("\n");
 	printf("Graph->Nv:%5d\n", Graph->Nv);
-	printf("Graph->Ne:%5d\n", Graph->Ne); 
-	DFS(Graph,0,Visit);
+	printf("Graph->Ne:%5d\n\n\n", Graph->Ne); 
+/*--------------------------------------------*/
+
+	Uweighted(Graph, dist, path, 0);
+	
+	for(i = 0; i < Graph->Nv; i++)
+		printf("%3c",Graph->G[i].Data);
+	printf("\n");
+	
+	for(i = 0; i < Graph->Nv; i++)
+		printf("%3d",dist[i]);
+	printf("\n");
+	
+	for(i = 0; i < Graph->Nv; i++)
+		printf("%3d",path[i]);
+	printf("\n");
+
+
 }

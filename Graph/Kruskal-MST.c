@@ -4,6 +4,9 @@
 #define ERROR 0
 #define MaxVertexNum 100
 #define INFINITY 100
+#define bool int
+#define false 0
+#define true 1 
 
 typedef int Vertex;
 typedef int WeightType;

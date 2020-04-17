@@ -3,12 +3,13 @@
 #define ERROR -1
 #define MaxVertexNum 100
 #define INFINITY 100
+#define bool int
+#define false 0
+#define true 1 
 
 typedef int Vertex;
 typedef int WeightType;
 typedef char DataType;
-
-
 
 /*--------------------邻接矩阵的创建----------------*/ 
 //defination of edge

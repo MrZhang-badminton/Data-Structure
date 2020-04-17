@@ -27,9 +27,10 @@ SetName Find( SetType S, ElementType X )
 
 int main(){
 	SetType s = {0};
+	int i;
 	s[0] = 1;
 	s[1] = 100;
 	
-	for(int i = 0; i < 10; i++)
+	for(i = 0; i < 10; i++)
 		printf("%5d",s[i]);
 } 

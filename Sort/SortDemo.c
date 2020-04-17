@@ -5,6 +5,9 @@
 
 #define MAXSIZE 10  //排序的数的个数 
 #define inf 0x3f3f3f3f
+#define bool int
+#define false 0
+#define true 1 
 
 typedef int ElemType;
 
@@ -300,7 +303,7 @@ void BucketSort(ElemType Arr[],int N){
 	
 	Pos = 0;
  	//将桶中元素分别排序好，依次放入原来数组中 
-	for(int i = 0; i < Num; i++){
+	for(i = 0; i < Num; i++){
 		//每个桶中元素用快速排序进行排序 
 		QuickSort((Ptr + i)->Node, (Ptr +i)->Count);
 		

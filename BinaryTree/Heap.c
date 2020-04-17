@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>//memset
+#define bool int
+#define false 0
+#define true 1 
 
 typedef int ElemType;
 typedef struct HNode *Heap;
@@ -106,6 +109,7 @@ typedef Heap MinHeap;
  
  int main(){
  	MaxHeap H;
+ 	int i; 
  	H = InitMaxHeap(7);
  	
  	//BuildHeap(H);
@@ -117,6 +121,6 @@ typedef Heap MinHeap;
  	DeleteMax(H);
  	DeleteMax(H);
  	DeleteMax(H);
- 	for(int i = 1 ; i <= 3; i++)
+ 	for(i = 1 ; i <= 3; i++)
  	printf("%5d\n",H->data[i]);
  }

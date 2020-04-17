@@ -3,6 +3,9 @@
 
 #define MAXSIZE 100
 #define MaxVertexNum 100
+#define bool int
+#define false 0
+#define true 1 
 
 //Õº÷–∂®“Â 
 typedef int Vertex;
