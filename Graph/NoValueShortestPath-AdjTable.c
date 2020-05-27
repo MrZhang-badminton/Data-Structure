@@ -20,7 +20,7 @@ typedef Vertex ElemType;
 	边数                         1
 	边信息(起点，终点，权重)     0 1 100  //0 1 为位置不是a,b 
 	顶点存放的信息               a
-                                 b
+								 b
 */ 
 
 
