@@ -327,7 +327,7 @@ void QSort(ElemType Arr[], int Left, int Right){
 }
 ```
 
-## 桶排序
+## 桶排序（BucketSort）
 
 桶排序适用于分布较为均匀的数组，如果分布很不均匀用桶排序效率很低。对于每个桶内的元素，这里都采用了快速排序进行排序。
 
