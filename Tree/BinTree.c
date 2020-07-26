@@ -123,7 +123,6 @@ int Max(int a,int b){
 	return a > b ? a : b; 
 }
 
-//获得树的高度  
 int GetHeight(BinTree T){
 	int a , b;
 	if(!T)return 0;
@@ -133,9 +132,13 @@ int GetHeight(BinTree T){
 	return Max(a,b) + 1;
 } 
 
+int GetBalanceFactor(BinTree T1, BinTree T2){
+	return GetHeight(T1) - GetHeight(T2);
+} 
+
 int IsAVLTree(BinTree T){
 	int a, b;
-	int h1,h2;
+	int balanceFactor;
 	if(!T) return 1;
 	
 	a = IsAVLTree(T->left);
@@ -143,19 +146,19 @@ int IsAVLTree(BinTree T){
 	if(a == 0 || b == 0)
 		return 0;
 	
-	h1 = GetHeight(T->left);
-	h2 = GetHeight(T->right);
-	return (h1 - h2 >= 2) || (h1 - h2 <= -2) ? 0 : 1;
+	balanceFactor = GetBalanceFactor(T->left, T->right);
+	return (balanceFactor >= 2) || (balanceFactor <= -2) ? 0 : 1;
 }
 
 int main() {
 	BinTree T;
 	T = CreateBinTree();
 	LevelTravel(T);
+	printf("\nThe height is: %d\n", GetHeight(T));
 	if(IsAVLTree(T)){
-		printf("avl!\n");
+		printf("The tree is AVLTree !\n");
 	}else{
-		printf("not avl!\n");
+		printf("The tree is not AVLTree !\n");
 	}
 }
 
