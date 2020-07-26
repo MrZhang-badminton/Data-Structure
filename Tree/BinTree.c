@@ -1,162 +1,161 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct Node ElemType;
+#define MAXSIZE 100
+typedef int TElemType;//----------------->TElemType
+
+typedef struct TNode* PtrToTNode;
+typedef PtrToTNode BinTree;
+struct TNode {
+	TElemType data;
+	BinTree left;
+	BinTree right;
+};
+
+typedef BinTree QElemType;//-------------->QElemType 
+typedef struct QNode* PtrToQNode;
+struct QNode {
+	QElemType* elem;
+	int front;
+	int rear;
+};
+typedef PtrToQNode Queue;
 
 
-//二叉树结构 
-typedef struct Node{
-	int data;
-	struct Node *left;
-	struct Node *right;
-}*BinTree; 
-
-
-/*-----------------队列--------------------*/ 
-typedef struct QNode{
-	ElemType val;
-	struct QNode *next;
-}QNode,*Queueptr;
-
-typedef struct{
-	Queueptr front;
-	Queueptr rear;
-}LinkQue;
-
-LinkQue * InitQueue(){
-	LinkQue *q = (LinkQue *)malloc(sizeof(LinkQue));
-	q->front = q->rear = NULL;
-	return q;
+/*----------------------------Queue--------------------------------------------*/
+Queue CreateQueue() {
+	Queue Q;
+	Q = (Queue)malloc(sizeof(struct QNode));
+	Q->elem = (QElemType*)malloc(sizeof(QElemType) * MAXSIZE);
+	Q->front = Q->rear = 0;
+	return Q;
 }
 
-void Enqueue(LinkQue *q, ElemType ele){
-	Queueptr p = (Queueptr)malloc(sizeof(QNode));
-	if(p == NULL)return;
-	p->val = ele;
-	p->next = NULL;
-	if(q->front == NULL){
-		q->front = p;
-		q->rear = p;
-	}else{
-		q->rear->next = p;
-		q->rear = p; 
+int IsFull(Queue Q) {
+	return (Q->rear + 1) % MAXSIZE == Q->front;
+}
+
+void Add(Queue Q,QElemType elem){
+	if(elem == NULL) return; 
+	if(IsFull(Q)){
+		printf("队列已满！\n");
+		exit(0); 
 	}
+	Q->elem[Q->rear] = elem;
+	Q->rear = (Q->rear+1) % MAXSIZE;
 }
 
-int isEmpty(LinkQue *q){
-	return q->front == NULL;
+int IsEmpty(Queue Q) {
+	return Q->front == Q->rear;
 }
 
-ElemType Dequeue(LinkQue *q){
-	if(isEmpty(q)){
-		printf("Error!\n");
+QElemType Delete(Queue Q) {
+	QElemType temp;
+	if (IsEmpty(Q)) {
+		printf("队列已空！\n");
 		exit(0);
 	}
-	
-	Queueptr p = q->front;
-	ElemType temp = q->front->val;
-	
-	
-	if(q->front == q->rear){
-		q->front = NULL;
-		q->rear = NULL;
-	}else{
-		q->front = q->front->next;
-	}
-	free(p);
+	temp = Q->elem[Q->front];
+	Q->front = (Q->front + 1) % MAXSIZE;
 	return temp;
-	
 }
-/*---------------------------------------*/ 
 
-
-
-/*--------二叉树的实现、初始化和遍历 -------------*/ 
-void CreateBinTree(BinTree *T){
+/*---------------------------Tree------------------------------------------*/
+BinTree CreateBinTree() {
+	BinTree T;
 	int i;
+
 	scanf("%d", &i);
-	if(i == -1) 
-		*T = NULL;
-	else{
-		*T = (BinTree)malloc(sizeof(struct Node));
-		(*T)->data = i;
+	if (i == -1)
+		T = NULL;
+	else {
+		T = (BinTree)malloc(sizeof(struct TNode));
+		T->data = i;
 		printf("请输入左孩子：如果为空输入-1\n");
-		CreateBinTree(&(*T)->left);
+		T->left = CreateBinTree();
 		printf("请输入右孩子：如果为空输入-1\n");
-		CreateBinTree(&(*T)->right);
+		T->right = CreateBinTree();
 	}
-	
+	return T;
 }
-//先序遍历 
-void PreTravel(BinTree T){
-	if(T == NULL) return;
-	printf("%5d", T->data);
-	PreTravel(T->left);
-	PreTravel(T->right);
-}
-
-//中序遍历 
-void InTravel(BinTree T){
-	if(T == NULL) return;
-	InTravel(T->left);
-	printf("%5d", T->data);
-	InTravel(T->right);
-}
-
-//后序遍历 
-void PostTravel(BinTree T){
-	if(T == NULL) return;
-	PostTravel(T->left);
-	PostTravel(T->right);
-	printf("%5d", T->data);
-}
-
-//层次遍历 
-void LevelTravel(BinTree T){
-	LinkQue *Q;
-	struct Node temp;
-	if(!T) return;
-	
-	Q = InitQueue();
-	Enqueue(Q,*T);
-	while(!isEmpty(Q)){
-		temp = Dequeue(Q);
-		printf("%5d",temp.data);
-		if(temp.left)Enqueue(Q,*(temp.left));
-		if(temp.right)Enqueue(Q,*(temp.right));
+void PreTravel(BinTree T) {
+	if (T) {
+		printf("%d ", T->data);
+		PreTravel(T->left);
+		PreTravel(T->right);
 	}
 }
-/*-------------------------------------------*/
 
-/*---------------附加测试是否为AVL------------*/ 
+void InTraverl(BinTree T) {
+	if (T) {
+		InTraverl(T->left);
+		printf("%d ", T->data);
+		InTraverl(T->right);
+	}
+}
+
+void PostTravel(BinTree T) {
+	if (T) {
+		PostTravel(T->left);
+		PostTravel(T->right);
+		printf("%d ", T->data);
+	}
+}
+
+void LevelTravel(BinTree T) {
+	Queue Q;
+	PtrToTNode tmpNode;
+
+	if (!T) return;
+
+	Q = CreateQueue();
+	Add(Q, T);
+	while (!IsEmpty(Q)) {
+		tmpNode = Delete(Q);
+		printf("%d ", tmpNode->data);
+		if (T->left) Add(Q, tmpNode->left);
+		if (T->right) Add(Q, tmpNode->right);
+	}
+}
+
+/*----------------------------IsAVLTree----------------------------------------*/ 
 int Max(int a,int b){
 	return a > b ? a : b; 
 }
 
+//获得树的高度  
 int GetHeight(BinTree T){
 	int a , b;
 	if(!T)return 0;
 	a = GetHeight(T->left);
 	b = GetHeight(T->right);
 	
-	if(((a-b) >= 2) ||((a-b)<= -2)){
-		return -1;
-	}
-	
 	return Max(a,b) + 1;
-	
 } 
-/*-----------------------------------*/
 
-int main(){
-	int a;
-	BinTree Tree;
-	printf("请输入头结点:\n"); 
-	CreateBinTree(&Tree);
-	a = GetHeight(Tree);
-	if(a > 0)
-		printf("\n是AVL！\n");
-	else
-		printf("\n不是AVL\n");
-	LevelTravel(Tree);
+int IsAVLTree(BinTree T){
+	int a, b;
+	int h1,h2;
+	if(!T) return 1;
+	
+	a = IsAVLTree(T->left);
+	b = IsAVLTree(T->right);
+	if(a == 0 || b == 0)
+		return 0;
+	
+	h1 = GetHeight(T->left);
+	h2 = GetHeight(T->right);
+	return (h1 - h2 >= 2) || (h1 - h2 <= -2) ? 0 : 1;
 }
+
+int main() {
+	BinTree T;
+	T = CreateBinTree();
+	LevelTravel(T);
+	if(IsAVLTree(T)){
+		printf("avl!\n");
+	}else{
+		printf("not avl!\n");
+	}
+}
+
