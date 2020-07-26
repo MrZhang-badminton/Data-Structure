@@ -1,73 +1,54 @@
 #include<stdio.h>
-#include<stdlib.h> 
+#include<stdlib.h>
 
-#define MAXSIZE 1000
-typedef struct Node{
-	int data;
-	struct Node *next;
-}Node;
+typedef int ElemType;
+typedef struct Node *PtrToNode;
+struct Node{
+	ElemType data;
+	PtrToNode next;
+};
+typedef PtrToNode List;
 
-Node * init(){
-	Node *p = (Node*)malloc(sizeof(Node));
-	p->data = -1;
+List createList(){
+	List L;
+	L = (PtrToNode)malloc(sizeof(struct Node));
+	L->next = NULL;
+	return L;
+}
+
+int addTail(List L, ElemType e){
+	PtrToNode p,tmp;
+	p = L;	
+	while(p->next) p = p->next;
+	tmp = (PtrToNode)malloc(sizeof(struct Node));
+	
+	tmp->data = e;
+	tmp->next = NULL;
+	
+	p->next = tmp;
+}
+
+ElemType deleteTail(List L){
+	PtrToNode p;
+	ElemType tmp;
+	
+	p = L;
+	while(p->next->next) p = p->next;
+	tmp = p->next->data;
+	free(p->next);
 	p->next = NULL;
-	return p;
-}
-
-void Add(Node *p, int data){
-	Node *newNode = (Node*)malloc(sizeof(Node));
-	Node *temp = p;
-	newNode->data = data;
-	newNode->next = NULL;
 	
-	while(temp->next != NULL){
-		temp = temp->next;
-	}
-	temp->next = newNode;
+	return tmp;
 	
-}
-
-int Reverse(Node *p){
-	Node *pre = p->next;//pre point to head->next
-	Node *cur = pre->next;
-	if(p->next == NULL){
-		printf("The list is null !\n");
-		return 0;
-	}
-	pre->next = NULL;
-	while(cur != NULL){
-		Node *temp = cur->next;
-		cur -> next = pre;
-		pre = cur;
-		cur = temp;
-	}
-	p->next = pre;
-	return 1;
-	
-	
-	
-}
-
-void printList(Node *p){
-	Node *temp = p->next;
-	while(temp != NULL){
-		printf("%5d",temp->data);
-		temp = temp->next;
-	}
-	printf("\n");
 }
 
 int main(){
+	List L;
+	L = createList();
+	addTail(L,123);
+	addTail(L,456);
 	
-	Node *List;
-	int i;
-	
-	List = init();
-	
-	for(i = 0; i < 20; i++)
-		Add(List, i);
-		
-	printList(List);
-	Reverse(List);
-	printList(List);
+	printf("%d\n",L->next->data);
+	printf("%d\n",L->next->next->data);
 }
+
