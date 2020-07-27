@@ -2,6 +2,9 @@
 #include<stdlib.h>
 
 #define MAXSIZE 100
+#define FALSE 0
+#define TRUE 1
+
 typedef int TElemType;//----------------->TElemType
 
 typedef struct TNode* PtrToTNode;
@@ -118,7 +121,7 @@ void LevelTravel(BinTree T) {
 	}
 }
 
-/*----------------------------IsAVLTree----------------------------------------*/ 
+/*----------------------------判断树的类型----------------------------------------*/ 
 int Max(int a,int b){
 	return a > b ? a : b; 
 }
@@ -136,18 +139,69 @@ int GetBalanceFactor(BinTree T1, BinTree T2){
 	return GetHeight(T1) - GetHeight(T2);
 } 
 
-int IsAVLTree(BinTree T){
+BinTree FindMin(BinTree T){
+	if(!T) return NULL;
+	while(T->left)
+		T = T->left;
+	return T;
+}
+
+BinTree FindMax(BinTree T){
+	if(!T) return NULL;
+	while(T->right)
+		T = T->right;
+	return T;
+}
+
+/*------------------判断树是否平衡  注：并非判断是否为平衡二叉树 ---------------*/
+int IsAverage(BinTree T){
 	int a, b;
 	int balanceFactor;
-	if(!T) return 1;
+	if(!T) return TRUE;
 	
-	a = IsAVLTree(T->left);
-	b = IsAVLTree(T->right);
-	if(a == 0 || b == 0)
-		return 0;
+	a = IsAverage(T->left);
+	b = IsAverage(T->right);
+	if(a == FALSE || b == FALSE)
+		return FALSE;
 	
 	balanceFactor = GetBalanceFactor(T->left, T->right);
-	return (balanceFactor >= 2) || (balanceFactor <= -2) ? 0 : 1;
+	return (balanceFactor >= 2) || (balanceFactor <= -2) ? FALSE : TRUE;
+}
+
+/*--------------------------判读是否是二叉排序树------------------------------*/ 
+int IsBinSearchTree(BinTree T){
+	BinTree tmpTree,tmpTree2;
+	
+	if(!T) return TRUE;
+	if(IsBinSearchTree(T->left) == FALSE || IsBinSearchTree(T->right) == FALSE)
+		return FALSE;
+	if(NULL == T->left && NULL == T->right){ 
+	//左右子树都为NULL
+	//则当前节点为根的树平衡，返回TRUE
+		return TRUE;
+	} else if(NULL == T->left && NULL != T->right){
+	//左子树为NULL，右子树非空
+		tmpTree = FindMin(T->right);
+		if(T->data <= tmpTree->data)
+			return TRUE;
+		else
+			return FALSE;
+	}else if(NULL != T->left && NULL == T->right){
+	//左子树非空，右子树为NULL
+		tmpTree = FindMax(T->left);
+		if(T->data >= tmpTree->data)
+			return TRUE;
+		else
+			return FALSE;
+	}else{
+	//左右子树皆非空
+		tmpTree = FindMax(T->left);
+		tmpTree2 = FindMin(T->right);
+		if(tmpTree->data <= T->data && T->data <= tmpTree2->data)
+			return TRUE;
+		else
+			return FALSE;
+	}
 }
 
 int main() {
@@ -155,10 +209,15 @@ int main() {
 	T = CreateBinTree();
 	LevelTravel(T);
 	printf("\nThe height is: %d\n", GetHeight(T));
-	if(IsAVLTree(T)){
-		printf("The tree is AVLTree !\n");
+	/*if(IsAverage(T)){
+		printf("The tree is Average !\n");
 	}else{
-		printf("The tree is not AVLTree !\n");
+		printf("The tree is not Average !\n");
+	}*/
+	if(IsBinSearchTree(T)){
+		printf("The tree is BinSearchTree !\n");
+	}else{
+		printf("The tree is not BinSearchTree !\n");
 	}
 }
 
