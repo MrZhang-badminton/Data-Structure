@@ -204,6 +204,13 @@ int IsBinSearchTree(BinTree T){
 	}
 }
 
+/*-------------------------ÅÐ¶ÏÊÇ·ñÊÇAVLÊ÷---------------------------*/ 
+int IsAVLTree(BinTree T){
+	if(IsBinSearchTree(T) && IsAverage(T))
+		return TRUE;
+	return FALSE;
+}
+
 int main() {
 	BinTree T;
 	T = CreateBinTree();
@@ -213,11 +220,16 @@ int main() {
 		printf("The tree is Average !\n");
 	}else{
 		printf("The tree is not Average !\n");
-	}*/
+	}
 	if(IsBinSearchTree(T)){
 		printf("The tree is BinSearchTree !\n");
 	}else{
 		printf("The tree is not BinSearchTree !\n");
-	}
+	}*/
+	
+	if(IsAVLTree(T))
+		printf("The tree is AVLTree ! \n");
+	else
+		printf("The tree is not AVLTree ! \n");
 }
 
