@@ -89,11 +89,11 @@ void PreTravel(BinTree T) {
 	}
 }
 
-void InTraverl(BinTree T) {
+void InTravel(BinTree T) {
 	if (T) {
-		InTraverl(T->left);
+		InTravel(T->left);
 		printf("%d ", T->data);
-		InTraverl(T->right);
+		InTravel(T->right);
 	}
 }
 
@@ -214,9 +214,10 @@ int IsAVLTree(BinTree T){
 int main() {
 	BinTree T;
 	T = CreateBinTree();
+	/*
 	LevelTravel(T);
 	printf("\nThe height is: %d\n", GetHeight(T));
-	/*if(IsAverage(T)){
+	if(IsAverage(T)){
 		printf("The tree is Average !\n");
 	}else{
 		printf("The tree is not Average !\n");
@@ -225,11 +226,23 @@ int main() {
 		printf("The tree is BinSearchTree !\n");
 	}else{
 		printf("The tree is not BinSearchTree !\n");
-	}*/
+	}
 	
 	if(IsAVLTree(T))
 		printf("The tree is AVLTree ! \n");
 	else
 		printf("The tree is not AVLTree ! \n");
+	*/
+	printf("前序遍历：");
+	PreTravel(T);
+	
+	printf("\n中序遍历：");
+	InTravel(T);
+	
+	printf("\n后序遍历：");
+	PostTravel(T);
+	
+	printf("\n层次遍历：");
+	LevelTravel(T);
 }
 
