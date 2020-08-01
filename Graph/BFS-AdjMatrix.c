@@ -143,7 +143,7 @@ void Visit( Vertex V ){
 }
 
 bool IsEdge(MGraph Graph, Vertex V, Vertex W){
-	return Graph->G[V][W] < INFINITY ? true : false;
+	return Graph->G[V][W] < INFINITY;
 }
 
 void BFS(MGraph Graph, Vertex S,void (*Visit)(Vertex)){
