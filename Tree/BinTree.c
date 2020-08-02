@@ -39,7 +39,7 @@ int IsFull(Queue Q) {
 }
 
 void Add(Queue Q,QElemType elem){
-	if(elem == NULL) return; 
+	//if(elem == NULL) return; 
 	if(IsFull(Q)){
 		printf("队列已满！\n");
 		exit(0); 
@@ -211,9 +211,72 @@ int IsAVLTree(BinTree T){
 	return FALSE;
 }
 
+/*-------------------------判断是否同构-------------------------------*/
+//递归 
+int IsSameStruct(BinTree T1, BinTree T2){
+	/*if(T1 == NULL && T2 == NULL)
+		return TRUE;
+	if(T1 == NULL || T2 == NULL)
+		return FALSE;*/
+	//上述式子可以简化为如下 
+	if(T1 == NULL || T2 == NULL) return T2 == NULL;	
+	
+	return IsSameStruct(T1->left, T2->left) && IsSameStruct(T1->right, T2->right);
+} 
+
+//非递归
+int IsSameStruct2(BinTree T1, BinTree T2){
+	Queue Q1,Q2;
+	BinTree p, q;
+	
+	Q1 = CreateQueue();
+	Q2 = CreateQueue();
+	
+	Add(Q1,T1);
+	Add(Q2,T2);
+	
+	while(IsEmpty(Q1) == FALSE && IsEmpty(Q2) == FALSE){
+		p = Delete(Q1);
+		q = Delete(Q2);
+		
+		if(p != NULL && q != NULL){
+			if(p->left == NULL && q->left == NULL){
+			//两右子树都为NULL的情况不做处理 
+			}else if(p != NULL || q != NULL){
+				//有一颗子树为空 
+				return FALSE;
+			}else{
+			//两左子树全部非空 
+				Add(Q1, p->left);
+				Add(Q2, p->left);
+			}
+			
+			if(p->right == NULL && q->right == NULL){
+			//两右子树都为NULL的情况不做处理 
+			}else if( p != NULL || q != NULL){
+			//有一颗子树为空 
+				return FALSE;
+			}else{
+			//两左子树全部非空 
+				Add(Q1, p->right);
+				Add(Q2, q->right);
+			}
+		}else if(T1 != NULL || T2 != NULL){
+			return FALSE;
+		}else{
+			//T1，T2都为NULL的情况不作处理 
+		}
+	}
+	
+	//整棵树遍历完了之后没有返回FALSE，则返回TRUE
+	return TRUE; 
+} 
+
 int main() {
-	BinTree T;
-	T = CreateBinTree();
+	BinTree T1,T2;
+	T1 = CreateBinTree();
+	printf("下面请输入第二棵树的信息：\n");
+	T2 = CreateBinTree();
 	/*
 	LevelTravel(T);
 	printf("\nThe height is: %d\n", GetHeight(T));
@@ -233,6 +296,8 @@ int main() {
 	else
 		printf("The tree is not AVLTree ! \n");
 	*/
+	
+	/*
 	printf("前序遍历：");
 	PreTravel(T);
 	
@@ -244,5 +309,11 @@ int main() {
 	
 	printf("\n层次遍历：");
 	LevelTravel(T);
+	*/
+	
+	if(IsSameStruct2(T1, T2))
+		printf("同构\n");
+	else
+		printf("不同构\n");
 }
 
