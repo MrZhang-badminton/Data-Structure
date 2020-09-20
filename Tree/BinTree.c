@@ -141,7 +141,7 @@ void Visit(BinTree T) {
 	if (!T)return;
 	printf("%d ", T->data);
 }
-void PreTravel(BinTree T) {
+void PreOrder(BinTree T) {
 	if (T) {
 		Visit(T);
 		PreTravel(T->left);
@@ -149,7 +149,7 @@ void PreTravel(BinTree T) {
 	}
 }
 
-void InTravel(BinTree T) {
+void InOrder(BinTree T) {
 	if (T) {
 		InTravel(T->left);
 		Visit(T);
@@ -157,7 +157,7 @@ void InTravel(BinTree T) {
 	}
 }
 
-void PostTravel(BinTree T) {
+void PostTOrder(BinTree T) {
 	if (T) {
 		PostTravel(T->left);
 		PostTravel(T->right);
@@ -165,7 +165,7 @@ void PostTravel(BinTree T) {
 	}
 }
 
-void LevelTravel(BinTree T) {
+void LevelOrder(BinTree T) {
 	Queue Q;
 	PtrToTNode tmpNode;
 
