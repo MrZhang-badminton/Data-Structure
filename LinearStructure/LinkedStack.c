@@ -5,11 +5,11 @@
 #define TRUE 1
 #define FALSE 0
 
-typedef int ElemType;
+typedef int SElemType;
 
 typedef struct SNode *PtrToSNode;
 struct SNode{
-	ElemType data;
+	SElemType data;
 	PtrToSNode next;
 }; 
 typedef PtrToSNode Stack;
@@ -25,7 +25,7 @@ int IsEmpty(Stack S){
 	return S->next == NULL;
 }
 
-int Push(Stack S, ElemType elem){
+int Push(Stack S, SElemType elem){
 	PtrToSNode tmpCell;
 	tmpCell = (PtrToSNode)malloc(sizeof(struct SNode));
 	if(!tmpCell) exit(OVERFLOW);
@@ -35,9 +35,9 @@ int Push(Stack S, ElemType elem){
 	return TRUE;
 }
 
-ElemType Pop(Stack S){
+SElemType Pop(Stack S){
 	PtrToSNode firstCell;
-	ElemType tmp;
+	SElemType tmp;
 	if(IsEmpty(S)){
 		printf("Stack is empty !\n");
 		exit(FALSE);
@@ -50,7 +50,7 @@ ElemType Pop(Stack S){
 	return tmp;
 }
 
-ElemType GetTop(Stack S){
+SElemType GetTop(Stack S){
 	if(!IsEmpty(S))
 		return S->next->data;
 	else{

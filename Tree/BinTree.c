@@ -16,7 +16,8 @@ struct TNode {
 	BinTree right;
 };
 
-typedef BinTree QElemType;//-------------->QElemType 
+/*------------------------------Queue-------------------------------------*/
+typedef BinTree QElemType;
 typedef struct QNode* PtrToQNode;
 struct QNode {
 	QElemType* elem;
@@ -26,7 +27,6 @@ struct QNode {
 typedef PtrToQNode Queue;
 
 
-/*----------------------------Queue--------------------------------------------*/
 Queue CreateQueue() {
 	Queue Q;
 	Q = (Queue)malloc(sizeof(struct QNode));
@@ -64,14 +64,16 @@ QElemType Delete(Queue Q) {
 	return temp;
 }
 
-/*----------------------------Stack---------------------------------------*/
-typedef BinTree ElemType;
+
+/*-------------------------------Stack---------------------------------------*/
+typedef BinTree SElemType;
 typedef struct SNode* PtrToSNode;
 struct SNode {
-	ElemType data;
+	SElemType data;
 	PtrToSNode next;
 };
 typedef PtrToSNode Stack;
+
 
 Stack CreateStack() {
 	Stack S;
@@ -84,7 +86,7 @@ int IsStackEmpty(Stack S) {
 	return S->next == NULL;
 }
 
-int Push(Stack S, ElemType elem) {
+int Push(Stack S, SElemType elem) {
 	PtrToSNode tmpCell;
 	tmpCell = (PtrToSNode)malloc(sizeof(struct SNode));
 	if (!tmpCell) exit(OVERFLOW);
@@ -94,9 +96,9 @@ int Push(Stack S, ElemType elem) {
 	return TRUE;
 }
 
-ElemType Pop(Stack S) {
+SElemType Pop(Stack S) {
 	PtrToSNode firstCell;
-	ElemType tmp;
+	SElemType tmp;
 	if (IsStackEmpty(S)) {
 		printf("Stack is empty !\n");
 		exit(FALSE);
@@ -110,7 +112,7 @@ ElemType Pop(Stack S) {
 	return tmp;
 }
 
-ElemType GetTop(Stack S) {
+SElemType GetTop(Stack S) {
 	if (!IsStackEmpty(S))
 		return S->next->data;
 	else {
@@ -119,7 +121,7 @@ ElemType GetTop(Stack S) {
 	}
 }
 
-/*---------------------------Tree------------------------------------------*/
+/*------------------------------Tree------------------------------------------*/
 BinTree CreateBinTree() {
 	BinTree T;
 	int i;
@@ -144,23 +146,23 @@ void Visit(BinTree T) {
 void PreOrder(BinTree T) {
 	if (T) {
 		Visit(T);
-		PreTravel(T->left);
-		PreTravel(T->right);
+		PreOrder(T->left);
+		PreOrder(T->right);
 	}
 }
 
 void InOrder(BinTree T) {
 	if (T) {
-		InTravel(T->left);
+		InOrder(T->left);
 		Visit(T);
-		InTravel(T->right);
+		InOrder(T->right);
 	}
 }
 
-void PostTOrder(BinTree T) {
+void PostOrder(BinTree T) {
 	if (T) {
-		PostTravel(T->left);
-		PostTravel(T->right);
+		PostOrder(T->left);
+		PostOrder(T->right);
 		Visit(T);
 	}
 }
@@ -432,7 +434,7 @@ int main() {
 	PostOrder2(T1);
 
 	printf("\n²ã´Î±éÀú£º");
-	LevelTravel(T1);
+	LevelOrder(T1);
 
 
 	/*
