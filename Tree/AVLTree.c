@@ -21,7 +21,8 @@ int GetHeight(AVLTree T){
 	return T->height;
 }
 
-AVLTree SingleLeftRotation(AVLTree A){// A必须有B左子节点 
+AVLTree SingleLeftRotation(AVLTree A){
+// A必须有B左子节点 
 	AVLTree B = A->left;
 	A->left = B->right;
 	B->right = A;

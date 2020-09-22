@@ -131,7 +131,7 @@ int IsAverage(BinTree T) {
 }
 
 
-/*----------------------判读是否是二叉排序树-------------------------*/ 
+/*----------------------判读是否是二叉排序树-------------------------*/
 int IsBinSearchTree(BinTree T) {
 	BinTree tmpTree, tmpTree2;
 
@@ -170,10 +170,24 @@ int IsBinSearchTree(BinTree T) {
 	}
 }
 
-int IsBinSearchTree(BinTree T){
+//基于中序遍历的判断是否是二叉搜索树 
+int IsBinSearchTree2(BinTree T) {
 	static int preVal = -32767;
-	
-} 
+
+	int b1, b2;
+	if (!T) {
+		return 1;
+	}
+	else {
+		b1 = IsBinSearchTree2(T->left);
+		if (b1 == 0 || preVal >= T->data)
+			return 0;
+		preVal = T->data;
+		b2 = IsBinSearchTree2(T->right);
+		return b2;
+	}
+
+}
 
 
 
@@ -254,22 +268,25 @@ int IsSameStruct2(BinTree T1, BinTree T2) {
 int main() {
 	BinTree T1, T2;
 	T1 = CreateBinTree();
-	/*printf("下面请输入第二棵树的信息：\n");
-	T2 = CreateBinTree();*/
 	/*
+	printf("下面请输入第二棵树的信息：\n");
+	T2 = CreateBinTree();
+
 	LevelTravel(T);
 	printf("\nThe height is: %d\n", GetHeight(T));
 	if(IsAverage(T)){
 		printf("The tree is Average !\n");
 	}else{
 		printf("The tree is not Average !\n");
-	}
-	if(IsBinSearchTree(T)){
+	}*/
+	if (IsBinSearchTree2(T1)) {
 		printf("The tree is BinSearchTree !\n");
-	}else{
+	}
+	else {
 		printf("The tree is not BinSearchTree !\n");
 	}
 
+	/*
 	if(IsAVLTree(T))
 		printf("The tree is AVLTree ! \n");
 	else
